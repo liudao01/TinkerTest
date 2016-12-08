@@ -7,7 +7,7 @@
 /build
 /captures
 .externalNativeBuild
-.gitignore
+
 .idea/
 
 libs/
@@ -50,3 +50,4 @@ captures/
 
 # Keystore files
 *.jks
+src/main/res/drawable/
