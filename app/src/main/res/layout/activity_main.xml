@@ -13,10 +13,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="这是修复的版本"
+        android:text="这是有bug的版本"
         android:id="@+id/textView" />
 
         <!--android:text="这是有bug的版本"-->
+        <!--android:text="这是修复的版本"-->
     <Button
         android:text="修复bug"
         android:layout_width="wrap_content"
