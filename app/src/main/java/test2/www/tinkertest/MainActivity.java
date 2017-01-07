@@ -8,6 +8,9 @@ import android.widget.Button;
 
 import com.tencent.tinker.lib.tinker.TinkerInstaller;
 
+/**
+ * 主目录
+ */
 public class MainActivity extends AppCompatActivity {
 
 
