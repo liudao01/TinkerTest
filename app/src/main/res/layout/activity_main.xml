@@ -15,7 +15,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="这是修复的版本" />
+        android:text="这是有bug的版本" />
 
     <!--android:text="这是有bug的版本"-->
     <!--android:text="这是修复的版本"-->
