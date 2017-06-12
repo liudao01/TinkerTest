@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.tencent.tinker.lib.library.TinkerLoadLibrary;
+import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.lib.tinker.TinkerInstaller;
 import com.tencent.tinker.loader.shareutil.ShareTinkerInternals;
 
@@ -36,6 +37,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button cleanPatchButton = (Button) findViewById(R.id.cleanPatch);
+
+        cleanPatchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Tinker.with(getApplicationContext()).cleanPatch();
+            }
+        });
+
         Button killSelfButton = (Button) findViewById(R.id.killSelf);
 
         killSelfButton.setOnClickListener(new View.OnClickListener() {
@@ -45,5 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 android.os.Process.killProcess(android.os.Process.myPid());
             }
         });
+
+
     }
 }
