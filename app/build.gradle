@@ -22,27 +22,25 @@ dependencies {
 //    compile("com.tencent.tinker:tinker-commons:${TINKER_VERSION}") { changing = true }
 
 }
-
+//TINKER_ID
 def gitSha() {
-
-    return "1.7"
-
-//    try {
-//        String gitRev = 'git rev-parse --short HEAD'.execute(null, project.rootDir).text.trim()
-//        if (gitRev == null) {
-//            throw new GradleException("can't get git rev, you should add git to system path or just input test value, such as 'testTinkerId'")
-//        }
-//        return gitRev
-//    } catch (Exception e) {
-//        throw new GradleException("can't get git rev, you should add git to system path or just input test value, such as 'testTinkerId'")
-//    }
+    return "1.0"
+    /*try {
+        String gitRev = 'git rev-parse --short HEAD'.execute(null, project.rootDir).text.trim()
+        if (gitRev == null) {
+            throw new GradleException("can't get git rev, you should add git to system path or just input test value, such as 'testTinkerId'")
+        }
+        return gitRev
+    } catch (Exception e) {
+        throw new GradleException("can't get git rev, you should add git to system path or just input test value, such as 'testTinkerId'")
+    }*/
 }
 
 def javaVersion = JavaVersion.VERSION_1_7
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion '25.0.0'
 
     compileOptions {
         sourceCompatibility javaVersion
@@ -71,22 +69,15 @@ android {
     }
 
     defaultConfig {
-        applicationId "test2.www.tinkertest"
-        minSdkVersion 14
-        targetSdkVersion 25
+        applicationId "tinker.sample.android"
+        minSdkVersion 10
+        targetSdkVersion 22
         versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        versionName "1.0.0"
         /**
          * you can use multiDex and install it in your ApplicationLifeCycle implement
          */
         multiDexEnabled true
-        /**
-         * not like proguard, multiDexKeepProguard is not a list, so we can't just
-         * add for you in our task. you can copy tinker keep rules at
-         * build/intermediates/tinker_intermediates/tinker_multidexkeep.pro
-         */
-        multiDexKeepProguard file("keep_in_main_dex.txt")
         /**
          * buildConfig can change during patch!
          * we can use the newly value when patch
@@ -147,15 +138,15 @@ ext {
     tinkerEnabled = true
 
     //for normal build
-    //old apk file to build patch apkapp/build/bakApk/app-debug-1206-18-20-39.apk
-    tinkerOldApkPath = "${bakPath}/app-debug-1206-18-20-39.apk"
+    //old apk file to build patch apk
+    tinkerOldApkPath = "${bakPath}/app-debug-0612-14-58-26.apk"
     //proguard mapping file to build patch apk
-    tinkerApplyMappingPath = "${bakPath}/app-debug-1129-16-08-44-mapping.txt"
+    tinkerApplyMappingPath = "${bakPath}/app-debug-1018-17-32-47-mapping.txt"
     //resource R.txt to build patch apk, must input if there is resource changed
-    tinkerApplyResourcePath = "${bakPath}/app-debug-1206-18-20-39-R.txt"
+    tinkerApplyResourcePath = "${bakPath}/app-debug-0612-14-58-26-R.txt"
 
     //only use for build all flavor, if not, just ignore this field
-    tinkerBuildFlavorDirectory = "${bakPath}/app-debug-1129-16-08-44"
+    tinkerBuildFlavorDirectory = "${bakPath}/app-1018-17-32-47"
 }
 
 
@@ -219,6 +210,12 @@ if (buildWithTinker()) {
         useSign = true
 
         /**
+         * optional，default 'true'
+         * whether use tinker to build
+         */
+        tinkerEnable = buildWithTinker()
+
+        /**
          * Warning, applyMapping will affect the normal android build!
          */
         buildConfig {
@@ -244,6 +241,21 @@ if (buildWithTinker()) {
              * we will gen the tinkerId in your manifest automatic
              */
             tinkerId = getTinkerIdValue()
+
+            /**
+             * if keepDexApply is true, class in which dex refer to the old apk.
+             * open this can reduce the dex diff file size.
+             */
+            keepDexApply = false
+
+            /**
+             * optional, default 'false'
+             * Whether tinker should treat the base apk as the one being protected by app
+             * protection tools.
+             * If this attribute is true, the generated patch package will contain a
+             * dex including all changed classes instead of any dexdiff patch-info files.
+             */
+            isProtectedApp = false
         }
 
         dex {
@@ -255,20 +267,7 @@ if (buildWithTinker()) {
              * or you want to save rom or check quicker, you can use raw mode also
              */
             dexMode = "jar"
-            /**
-             * optional，default 'false'
-             * if usePreGeneratedPatchDex is true, tinker framework will generate auxiliary class
-             * and insert auxiliary instruction when compiling base package using
-             * assemble{Debug/Release} task to prevent class pre-verified issue in dvm.
-             * Besides, a real dex file contains necessary class will be generated and packed into
-             * patch package instead of any patch info files.
-             *
-             * Use this mode if you have to use any dex encryption solutions.
-             *
-             * Notice: If you change this value, please trigger clean task
-             * and regenerate base package.
-             */
-            usePreGeneratedPatchDex = false
+
             /**
              * necessary，default '[]'
              * what dexes in apk are expected to deal with tinkerPatch
@@ -285,11 +284,9 @@ if (buildWithTinker()) {
              * own tinkerLoader, and the classes you use in them
              *
              */
-            loader = ["com.tencent.tinker.loader.*",
-                      //warning, you must change it with your application
-                      "tinker.sample.android.app.SampleApplication",
-                      //use sample, let BaseBuildInfo unchangeable with tinker
-                      "tinker.sample.android.app.BaseBuildInfo"
+            loader = [
+                    //use sample, let BaseBuildInfo unchangeable with tinker
+                    "tinker.sample.android.app.BaseBuildInfo"
             ]
         }
 
@@ -301,7 +298,7 @@ if (buildWithTinker()) {
              * for library in assets, we would just recover them in the patch directory
              * you can get them in TinkerLoadResult with Tinker
              */
-            pattern = ["lib/armeabi/*.so"]
+            pattern = ["lib/*/*.so"]
         }
 
         res {
@@ -377,6 +374,8 @@ if (buildWithTinker()) {
         flavors.add(flavor.name)
     }
     boolean hasFlavors = flavors.size() > 0
+    def date = new Date().format("MMdd-HH-mm-ss")
+
     /**
      * bak apk and mapping
      */
@@ -385,7 +384,6 @@ if (buildWithTinker()) {
          * task type, you want to bak
          */
         def taskName = variant.name
-        def date = new Date().format("MMdd-HH-mm-ss")
 
         tasks.all {
             if ("assemble${taskName.capitalize()}".equalsIgnoreCase(it.name)) {
