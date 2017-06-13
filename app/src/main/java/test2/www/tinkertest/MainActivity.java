@@ -12,7 +12,7 @@ import com.tencent.tinker.lib.tinker.TinkerInstaller;
 import com.tencent.tinker.loader.shareutil.ShareTinkerInternals;
 
 /**
- * 主界面
+ * 主界面 本地分支
  */
 public class MainActivity extends AppCompatActivity {
 
