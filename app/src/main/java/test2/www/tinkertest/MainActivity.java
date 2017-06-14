@@ -12,7 +12,7 @@ import com.tencent.tinker.lib.tinker.TinkerInstaller;
 import com.tencent.tinker.loader.shareutil.ShareTinkerInternals;
 
 /**
- * 主界面 本地分支
+ * 主界面  
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //删除补丁
         Button cleanPatchButton = (Button) findViewById(R.id.cleanPatch);
 
         cleanPatchButton.setOnClickListener(new View.OnClickListener() {
