@@ -12,11 +12,10 @@ import com.tencent.tinker.lib.tinker.TinkerInstaller;
 import com.tencent.tinker.loader.shareutil.ShareTinkerInternals;
 
 /**
- * 主界面  本地=============
+ * 主界面  over
  */
 public class MainActivity extends AppCompatActivity {
-//主的
-    //远程2
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
