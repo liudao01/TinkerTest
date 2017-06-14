@@ -16,6 +16,7 @@ import com.tencent.tinker.loader.shareutil.ShareTinkerInternals;
  */
 public class MainActivity extends AppCompatActivity {
 //主的
+    //远程
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
